@@ -1,95 +1,50 @@
-# React Controlled Components Lab
+# Shopster: Dynamic Shopping List Manager
 
-## Learning Goals
+Shopster is an interactive, single-page React web application designed to help users efficiently manage grocery trips, catalog pantry items, and track shopping inventories in real time. 
 
-- Implement a controlled form
+This project serves as a practical implementation of **React Controlled Components**, demonstrating how to synchronize form elements and user inputs with React state to achieve responsive UI updates, live search filtering, and immutable data handling.
 
-## Introduction
+The remote codebase for this repository is tracked at:  
+🔗 **[https://github.com/0xJBS/ShoppingForms.git](https://github.com/0xJBS/ShoppingForms.git)**
 
-In this lab, you'll write and use controlled components.
+---
 
-## Controlled Components
+## 🚀 Core Application Features
 
-Now that we know how to handle form elements in React and how to set up
-controlled components, it's time to put that knowledge to the test. This lab is
-fairly extensive, but you'll use many core React concepts here that will surface
-again and again. Time to get some practice in!
+- **Live Keyword Search**: A case-insensitive search engine that updates your display list automatically as you type.
+- **Department Sorting Dropdown**: A filter system that lets users narrow down items by category (*Produce, Dairy, Bakery, Meat, or Dessert*) or view all items collectively.
+- **Dynamic Inventory Ingestion**: An integrated form that supports custom grocery creation and assigns unique tracking IDs using the `uuid` library.
+- **Interactive Checklists**: Individual item components containing interactive toggles to visually mark products as added to or removed from the physical shopping cart.
+- **Light/Dark UI Modes**: Global application state support for alternating layout interfaces seamlessly via a header toggle button.
 
-We'll continue adding new features to the Shopping List app using controlled
-components. Make sure to familiarize yourself with the code before diving into
-the deliverables! Completing these deliverables will also require understanding
-of all the previous topics from this section, including initializing state,
-passing data and callback functions as props, and working with events.
+---
 
-## Deliverables
+## 🛠️ Learning Goals & Concepts Applied
 
-### Filter
+- **Controlled Forms**: Managing `<input>` and `<select>` elements dynamically by anchoring their `value` fields strictly to React state.
+- **Lifting State Up**: Passing callbacks down nested component trees to allow child components to communicate user data modifications back to parent managers.
+- **Immutable State Alterations**: Leveraging the ES6 Spread Operator (`[...array, element]`) to cleanly append items into state hooks without mutating historical data arrays directly.
+- **Component Isolation Isolation for Testing**: Structuring the interface states defensively so that sub-components execute perfectly under automated testing environments, even when mounted separately from the root template.
 
-In the filter component, there is a new input field for searching our list.
-_When the user types in this field_, the list of items should be filtered so
-that only items with names that match the text are included.
+---
 
-- Determine where you need to add state for this feature. What components need
-  to know about the search text?
+## 📋 Lab Deliverables & Component Breakdown
 
-- Once you've determined which component should hold the state for this feature,
-  set up your initial state, and connect that state to the input field.
-  Remember, we're trying to make this input a _controlled_ input — so the
-  input's value should always be in sync with state.
+### 1. Filter Component (`Filter.jsx`)
+In the filter component, there is an input field for searching our list. When the user types in this field, the list of items is filtered so that only items with names that match the text are included.
+- **Controlled Values**: The text field tracks a controlled `search` state via props, remaining strictly in sync with component memory.
+- **Prop Callbacks**: To update state on user typing patterns, it fires a callback prop named `onSearchChange`.
+- **Flexible String Matching**: Evaluates user inputs securely, resolving both full and case-insensitive partial string matches (`.toLowerCase().includes()`).
 
-- After you've connected the input to state, you'll also need to find a way to
-  _set_ state when the input _changes_. To get the test passing, you'll need to
-  use a prop called `onSearchChange` as a callback.
+*Note: While the starter dropdown selection initially works uncontrollably, it is updated here to act as a fully controlled element for optimal state safety.*
 
-- Finally, after making those changes, you'll need to use that state value to
-  determine which items are being displayed on the page, similar to how the
-  category dropdown works.
-
-**Note**: you may be asking yourself, why are we making this input controlled
-when the `<select>` element is not a controlled input? Well, the `<select>`
-input should probably be controlled as well! The tests don't require it, but
-feel free to update the `<select>` element to be a controlled element.
-
-### ItemForm
-
-There is a new component called `ItemForm` that will allow us to add new items
-to our shopping list. _When the form is submitted_, a new item should be created
-and added to our list of items.
-
-- Make all the input fields for this form controlled inputs, so that you can
-  access all the form data via state. When setting the initial state for the
-  `<select>` tag, use an initial value of "Produce" (since that's the first
-  option in the list).
-
-- Handle the form's _submit_ event, and use the data that you have saved in
-  state to create a new item object with the following properties:
-
-  ```jsx
+### 2. New Item Ingestion Form (`ItemForm.jsx`)
+There is a component called `ItemForm` that allows users to append fresh entries onto the master shopping grid.
+- **Controlled Forms Initialization**: All data gathering tags are fully controlled. When initializing state for the `<select>` tag dropdown, an initial default value of `"Produce"` is strictly enforced.
+- **Payload Interception**: Intercepts submit triggers, runs `event.preventDefault()`, and bundles the state details into a structural dictionary model:
+  ```javascript
   const newItem = {
-    id: uuid(), // the `uuid` library can be used to generate a unique id
+    id: uuid(), // The uuid library generates unique tracking identifiers
     name: itemName,
     category: itemCategory,
   };
-  ```
-
-- Add the new item to the list by updating state. To get the test passing,
-  you'll need to use a prop called `onItemFormSubmit` as a callback and pass the
-  new item to it.
-
-  **NOTE**: to add a new element to an array in state, it's a good idea to use
-  the spread operator:
-
-  ```jsx
-  function addElement(element) {
-    setArray([...array, element]);
-  }
-  ```
-
-  The spread operator allows us to copy all the old values of an array into a
-  new array, and then add new elements as well. When you're working with state,
-  it's important to pass a _new_ array to the state setter function instead of
-  mutating the original array.
-
-## Resources
-
-- [React Forms](https://facebook.github.io/react/docs/forms.html)
